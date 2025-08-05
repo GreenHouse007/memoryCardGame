@@ -53,11 +53,25 @@ function resetBoard() {
   [firstCard, secondCard] = [null, null];
 }
 
-(function shuffle() {
-  cards.forEach((card) => {
-    let randomPos = Math.floor(Math.random() * 12);
-    card.style.order = randomPos;
+function shuffle() {
+  const positions = [...Array(cards.length).keys()];
+  positions.sort(() => Math.random() - 0.5);
+
+  cards.forEach((card, index) => {
+    card.style.order = positions[index];
   });
-})();
+}
+
+shuffle(); //for starting shuffle
 
 cards.forEach((card) => card.addEventListener("click", flipCard));
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  cards.forEach((card) => {
+    card.classList.remove("flip");
+    card.addEventListener("click", flipCard);
+  });
+
+  resetBoard();
+  shuffle();
+});
